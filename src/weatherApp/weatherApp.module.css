@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif; 
+}
+
+body {
+  
+  background-color: #f3f4f6;
+}
+
+.weatherAppContainer {
+  margin: 0 auto;
+  max-width: 1920px;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-image: url('../../public/rainy.png');
+  background-size: cover;
+}
+
+.formContainer {
+  width: 710px;
+  height: 48px;
+  gap: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px; 
+}
+
+.weatherAppContainer form input {
+  color: rgba(255, 255, 255, 0.734);
+  width: 100%;
+  padding: 15px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.095);  
+  border-radius: 50px;
+}
+
+.searchButton {
+  width: 155px;
+  height: 48px;
+  border-radius: 50px;
+  padding: 12px 40px;
+  background-color: #3572b0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.searchButton:hover {
+  background-color: #285a8d;
+}
+
+.outputContainer {
+  color: rgba(255, 255, 255, 0.722);
+  width: 709px;
+  height: 220px;
+  background: linear-gradient(133.66deg, rgba(47, 72, 111, 0.62) 5.78%, rgba(11, 27, 52, 0.62) 96.58%);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  border-radius: 10px;
+  padding: 20px;
+  gap: 10px;
+  position: relative;
+}
+.outputContainer img {
+  margin-bottom: 80px;
+  margin-left: 125px;
+  
+}
+
+.outputText {
+  grid-column: span 1;
+  text-align: left;
+  margin-right: 200px;
+  margin-bottom: 80px;
+}
+.outputTemp{
+  font-size: 38px;
+  font-weight: 500;
+  
+}
+
+.buttonContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.addButton,
+.deleteButton {
+  width: 155px;
+  height: 48px;
+  border-radius: 50px;
+  padding: 12px 40px;
+  background-color: #3572b0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.addButton:hover,
+.deleteButton:hover {
+  background-color: #285a8d;
+}
+@media (max-width: 740px) {
+  .formContainer {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .outputContainer {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .outputContainer img {
+    margin: 0 auto 20px;
+  }
+
+  .outputText {
+    margin: 0;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .addButton,
+  .deleteButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    width: 90%;
+    gap: 10px;
+  }
+
+  .outputContainer {
+    width: 90%;
+    height: auto;
+    padding: 15px;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .outputContainer img {
+    margin: 0 auto 20px;
+  }
+
+  .outputText {
+    margin: 0;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .addButton,
+  .deleteButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 250px) {
+  .formContainer {
+    width: 100%;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .searchButton {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .outputContainer {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .outputText {
+    font-size: 14px;
+  }
+
+  .outputTemp {
+    font-size: 28px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .addButton,
+  .deleteButton {
+    width: 100%;
+    padding: 10px;
+  }
+}
