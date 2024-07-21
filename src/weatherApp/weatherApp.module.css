@@ -22,6 +22,7 @@ body {
 }
 
 .formContainer {
+  margin-top: 46px;
   width: 710px;
   height: 48px;
   gap: 14px;
@@ -60,7 +61,21 @@ body {
 }
 
 .outputContainer {
+  margin: 0 auto;
   color: rgba(255, 255, 255, 0.722);
+  width: 709px;
+  height: 220px;
+  background: linear-gradient(133.66deg, rgba(47, 72, 111, 0.62) 5.78%, rgba(11, 27, 52, 0.62) 96.58%);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  border-radius: 10px;
+  padding: 20px;
+  gap: 10px;
+  position: relative;
+}
+.outputError{
+  color: rgba(239, 6, 6, 0.722);
   width: 709px;
   height: 220px;
   background: linear-gradient(133.66deg, rgba(47, 72, 111, 0.62) 5.78%, rgba(11, 27, 52, 0.62) 96.58%);
@@ -98,6 +113,10 @@ body {
   display: flex;
   justify-content: space-between;
 }
+.outputContainer img {
+  width: 125px;
+  height: 125px;
+}
 
 .addButton,
 .deleteButton {
@@ -117,6 +136,47 @@ body {
 .deleteButton:hover {
   background-color: #285a8d;
 }
+
+.favoritesContainer{  
+  color: rgba(255, 255, 255, 0.722);
+  width: 709px;
+  height: fit-content;
+  background: linear-gradient(133.66deg, rgba(47, 72, 111, 0.62) 5.78%, rgba(11, 27, 52, 0.62) 96.58%);
+  display: grid;
+  grid-template-columns: repeat(3, 2fr);
+  place-items: center;
+  border-radius: 10px;
+  padding: 20px;
+  gap: 10px;
+  position: relative;
+  padding: 8px 10px;
+  
+}
+
+.favoriteItem >button {  
+  width: 36px;
+  height: 24px;
+  border-radius: 25px;  
+  background-color: #3572b0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+  .favoriteItem >button:hover {
+    background-color: #285a8d;
+    color: coral;
+  }
+
+.favoriteItem {
+  grid-column: span 1;
+  text-align: left;
+  margin-right: 200px;
+  margin-bottom: 80px;
+  image-resolution: 50px;
+}
+
 @media (max-width: 740px) {
   .formContainer {
     width: 100%;
@@ -165,7 +225,8 @@ body {
   }
 
   .outputContainer img {
-    margin: 0 auto 20px;
+    width: 50px;
+    height: 50px;
   }
 
   .outputText {
@@ -179,43 +240,43 @@ body {
 
   .addButton,
   .deleteButton {
-    width: 100%;
+    padding: 5px;
+    width: 80px;
+    height: 36px;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 500;
+    
+  }
+  .favoritesContainer{ 
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.722);
+    height: 400px;
+    width: 420px;
+    background: linear-gradient(133.66deg, rgba(47, 72, 111, 0.62) 5.78%, rgba(11, 27, 52, 0.62) 96.58%);   
+    place-items: center;
+    border-radius: 10px;       
+    position: relative;
+    
+    
+  }
+  /* .weatherAppFormContainer {
+   margin-top: 36px;
+  } */
+  .outputTemp, .outputText{
+    margin: 0 auto;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0;
+
   }
 }
 
-@media (max-width: 250px) {
-  .formContainer {
-    width: 100%;
-    flex-direction: column;
-    gap: 5px;
-  }
 
-  .searchButton {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .outputContainer {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .outputText {
-    font-size: 14px;
-  }
-
-  .outputTemp {
-    font-size: 28px;
-  }
-
-  .buttonContainer {
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .addButton,
-  .deleteButton {
-    width: 100%;
-    padding: 10px;
-  }
-}

@@ -1,129 +1,139 @@
-import React, { useEffect, useState } from "react";
-import style from "./weatherApp.module.css";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import {
+  addToFavorites,
+  resetError,
+  resetWeather,
+  deleteFromFavorites,
+} from "./actions-reducers/weatherReducers";
 import WeatherHeader from "./header/WeatherHeader";
-import { WeatherContext } from "./context";
+import style from "./weatherApp.module.css";
+import getWeatherData from "./actions-reducers/weatherActions";
+import Spinner from "./Spinner/Spinner";
+import { logoutUser } from "../features/auth/authSlice";
 
+import Auth from "../auth/Auth";  // Make sure Auth component is implemented
+import { getUserWithToken } from "../features/auth/authActons";
 
 const initialValues = {
   location: "",
 };
 
-export interface WeatherData {
-  name: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-  };
-  weather: [
-    {
-      description: string;
-      icon: string;
-      id: number;
-      main: string;
-    }
-  ];
-  wind: {
-    speed: number;
-  };
-  sys: {
-    country: string;
-  };
-  dt: number;
-}
+const schema = Yup.object().shape({
+  location: Yup.string()
+    .trim()
+    .required("Required")
+    .min(1, "Too Short!")
+    .max(15, "Too Long!"),
+});
 
-const WeatherApp: React.FC = () => {
-  const [weather, setWeather] = useState<WeatherData>({} as WeatherData);
-  const [favorite, setFavorite] = useState<WeatherData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const WeatherApp = () => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);  // Update to use 'auth'
+  const favorites = useAppSelector((state) => state.weather.favorites);
+  const { weather, isLoading, error } = useAppSelector(
+    (store) => store.weather
+  );
 
-  
-  const addToFavorites = () => {
-    if (weather.name && !favorite.some((item) => item.name === weather.name)) {
-      setFavorite([...favorite, weather]);
-    } else {
-      alert("Already added to favorites");
-    }
-  };
-  const handleImageLoad = () => {
-    setLoading(!loading);
-  };
   const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: Yup.object({
-      location: Yup.string().trim().required("Required"),
-    }),
+    initialValues,
+    validationSchema: schema,
     onSubmit: (values) => {
-      async function getWeather(value: string) {
-        try {
-          const response = await fetch(`
-            https://api.openweathermap.org/data/2.5/weather?q=${value}&units=metric&appid=42283fd1cd2294032a234a8e7a5213ca`);
-          const data = await response.json();
-          setWeather(data);
-        } catch (error) {
-          console.error("Error fetching weather data:", error);
-        }
-      }
-
-      getWeather(values.location);
-      values.location = "";
+      dispatch(getWeatherData(values.location));
+      dispatch(resetError());
+      formik.resetForm();
     },
   });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const token = localStorage.getItem('shop-token');
+    if (token && !user.token) {
+      dispatch(getUserWithToken(token));
+    }
+  }, [user.token, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => dispatch(resetError()), 3000);
+    }
+  }, [error, dispatch]);
 
   return (
     <div className={style.weatherAppContainer}>
-      <WeatherContext.Provider value={favorite}>
-        <WeatherHeader />
-      </WeatherContext.Provider>
-
-      <form onSubmit={formik.handleSubmit}>
-        <div className={style.formContainer}>
-          <input
-            placeholder="Enter Location"
-            id="location"
-            name="location"
-            type="text"
-            
-            onChange={formik.handleChange}
-            value={formik.values.location}
-          />
-          <button  className={style.searchButton} type="submit" >
-            Search
-          </button>
-        </div>
-      </form>
-     
-     
-
-      {weather.main && (
-        <div className={style.outputContainer}>           
-          <div className={style.outputText}>
-            <p className={style.outputTemp}>
-              {Math.round(weather.main.temp)} °C
-            </p>
-            <p className={style.outputLocation}>{weather.name}</p>
-            <p className={style.outputCountry}>{weather.sys.country}</p>
-          </div>
-          
-          <img  style={{width: "150px", height: "150px"}}
-            src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-            alt=""
-          />
-          <div className={style.buttonContainer}>
-          <button
-            className={style.deleteButton}
-            onClick={() => setWeather({} as WeatherData)}
-          >
-            Delete
-          </button>
-          <button className={style.addButton} onClick={addToFavorites}>
-           Save
-          </button>
-          </div>
+      <WeatherHeader />
+      {!user.token && <Auth />}  
+      {user.token && (
+        <div>
+          <form onSubmit={formik.handleSubmit}>
+            <div className={style.formContainer}>
+              <input
+                placeholder="Enter Location"
+                id="location"
+                name="location"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.location}
+              />
+              <button className={style.searchButton} type="submit">
+                Search
+              </button>
+            </div>
+          </form>
+          {isLoading && <Spinner />}
+          {error && (
+            <div className={style.outputError}>
+              {"Location not found, please try again"}
+            </div>
+          )}
+          {weather.name !== "" && (
+            <div className={style.outputContainer}>
+              <div className={style.outputText}>
+                <p className={style.outputTemp}>
+                  {Math.round(weather.main.temp)} °C
+                </p>
+                <p className={style.outputLocation}>{weather.name}</p>
+                <p className={style.outputCountry}>{weather.sys.country}</p>
+              </div>
+              <img
+                
+                src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                alt=""
+              />
+              <div className={style.buttonContainer}>
+                <button
+                  className={style.deleteButton}
+                  onClick={() => dispatch(resetWeather())}
+                >
+                  Delete
+                </button>
+                <button
+                  className={style.addButton}
+                  onClick={() => dispatch(addToFavorites())}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          )}
+          {favorites.length > 0 && (
+            <div>
+              <h3>Favorites</h3>
+              <div className={style.favoritesContainer}>
+                {favorites.map((fav, index) => (
+                  <div key={index} className={style.favoriteItem}>
+                    <p>{fav.name}</p>
+                    <p>{Math.round(fav.main.temp)} °C</p>
+                    <p>{fav.sys.country}</p>
+                    <button onClick={() => dispatch(deleteFromFavorites(fav.name))}>
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}          
         </div>
       )}
     </div>

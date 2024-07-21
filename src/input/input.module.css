@@ -1,0 +1,26 @@
+.inputContainer {
+  margin-bottom: 20px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+  border-radius: 10px;
+  box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+  background-color: #e0e0e0;
+  box-sizing: border-box;
+  outline: none;
+  color: #333;
+}
